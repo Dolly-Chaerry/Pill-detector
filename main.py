@@ -32,9 +32,9 @@ else:
 
     print(f"Total images processed: {len(features_list)}")
 
-    # Save features to CSV
-    df = pd.DataFrame(features_list)
-    df.to_csv(DATA_CSV_PATH, index=False)
+    # # Save features to CSV
+    # df = pd.DataFrame(features_list)
+    # df.to_csv(DATA_CSV_PATH, index=False)
 
 #Training Model
 
