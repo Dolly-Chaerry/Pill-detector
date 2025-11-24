@@ -1,3 +1,4 @@
 # TRAINING 
-DATASET_PATH = "./practice_set_seg"
-DATA_CSV_PATH = "data.csv"
+DATASET_PATH = "./dataset/train/images/capsules/"
+CROPPED_PATH = DATASET_PATH + "cropped/"
+# DATA_PATH = "data.csv"
