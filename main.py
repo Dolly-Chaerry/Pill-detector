@@ -14,7 +14,7 @@ Prepare Dataset
 - feature extraction and scaler fitting
 '''
 # IMAGE SEGMENTATION OF DATASET - only run this section once
-# category = ['capsules', 'tablet']
+# category = ['capsule', 'tablet']
 # ctr = 0
 # #Training dataset
 # for cat in category:

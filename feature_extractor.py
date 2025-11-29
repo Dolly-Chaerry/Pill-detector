@@ -105,7 +105,7 @@ class FeatureExtractor:
     def fit_and_save(self, save_path="classical_features.npz"):
         features_list = []
         labels_list = []
-        class_to_idx = {"capsules": 0, "tablet": 1}
+        class_to_idx = {"capsule": 0, "tablet": 1}
 
         print("Extracting features from training set...")
         for class_name, label in class_to_idx.items():
