@@ -2,43 +2,29 @@ import streamlit as st
 import cv2
 import numpy as np
 from image_segmentation import ImageSegmenter
+
 st.title("Pill Detector")
+st.write("This app is to demonstrate a prototype of the machine pill detector. Please follow the setup:")
+st.html("<ul><li>Comlete White background</li> <li>Make sure the camera is close enough to the desk/surface</li> </ul>")
+run = st.checkbox('Try Demo')
+FRAME_WINDOW_main = st.image([])
+FRAME_WINDOW_mask = st.image([])
 
-# Toggle
-enable = st.checkbox("Enable live camera", value=True)
+camera=cv2.VideoCapture(0)
+segmenter = ImageSegmenter()
 
-if enable:
-    # This gives you a LIVE webcam feed inside Streamlit!
-    camera = st.camera_input(
-        "Live Camera",
-        key="live_cam",     # this is the important part
-        label_visibility="collapsed"
-    )
+while run:
+    _, frame = camera.read()
+    extracted_pills, bbox , thresh = segmenter.segment(frame)
+    display_frame = frame.copy()
 
-    # camera is None until the stream starts
-    if camera is not None:
-        # Convert the frame (it's already a PIL Image or bytes)
-        frame = np.array(camera)
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-
-        segmenter = ImageSegmenter(frame)
-        extracted, bboxes = segmenter.segment()
-
-        #draw bounding boxes on frame
-        display_frame = frame.copy()
-
-        for (x, y, w, h) in bboxes:
+    for (x, y, w, h) in bbox:
             cv2.rectangle(display_frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
             cv2.putText(display_frame, 'Pill', (x, y - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-        # Optional: Show number of detected pills
-        st.write(f"**Detected {len(bboxes)} pill(s)**")
-
-        # Convert back to RGB for Streamlit display
-        display_frame_rgb = cv2.cvtColor(display_frame, cv2.COLOR_BGR2RGB)
-
-        # Show the result with bounding boxes
-        st.image(display_frame_rgb, caption="Detected Pills", use_column_width=True)
+    # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    FRAME_WINDOW_main.image(cv2.cvtColor(display_frame, cv2.COLOR_BGR2RGB))
+    FRAME_WINDOW_mask.image(thresh)
 else:
-    st.write("Camera is disabled")
+    st.write('Stopped')

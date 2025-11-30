@@ -19,6 +19,8 @@ Prepare Dataset
 # IMAGE SEGMENTATION OF DATASET - only run this section once
 category = ['capsule', 'tablet']
 ctr = 0
+segmenter = ImageSegmenter()
+# masks = []
 
 print("STARTING IMAGE SEGMENTATION OF DATASET")
 for cat in category:
@@ -34,12 +36,15 @@ for cat in category:
     
     print(f"Processing category: {cat.upper()} ({len(paths)} images)")
     for path in tqdm(paths, desc=cat, unit="img"):
-        img_seg = ImageSegmenter(cv2.imread(path))
-        extracted, bboxes = img_seg.segment()
+        extracted, bboxes, _ = segmenter.segment(cv2.imread(path))
         if extracted:
             cv2.imwrite(EXPORT_CROPPED + f"{cat}/" + f"/capsule{ctr}.png", extracted[0]) #change to class
         ctr+=1
+    ctr=0
+    
 print("Segmentation complete")
+
+
 
 #SPLITTING DATA
 print("SPLITTING DATASET")

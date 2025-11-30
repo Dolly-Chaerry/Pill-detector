@@ -4,10 +4,12 @@ from config import RESIZE
 
 #need to resize image before inference resize to 244,244 pixels. 
 class ImageSegmenter:
-    def __init__(self, img):
-        self.image = img #should take in an already read image
-    def segment(self):
-        hsv = cv2.cvtColor(self.image , cv2.COLOR_BGR2HSV)
+    def __init__(self):
+        print("Initiated Segmenter")
+        pass
+        
+    def segment(self, img):
+        hsv = cv2.cvtColor(img , cv2.COLOR_BGR2HSV)
         s = hsv[:,:,1]
         s_blur = cv2.GaussianBlur(s, (5,5), 0)
         _, thresh1 = cv2.threshold(s_blur, 0,255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -43,13 +45,13 @@ class ImageSegmenter:
 
         for cnt in valid_contours:
             # Individual mask for this pill only
-            single_mask = np.zeros(self.image.shape[:2], dtype=np.uint8)
+            single_mask = np.zeros(img.shape[:2], dtype=np.uint8)
             cv2.drawContours(single_mask, [cnt], -1, 255, thickness=cv2.FILLED)
 
             x, y, w, h = cv2.boundingRect(cnt)
 
             # Crop just this pill region (much faster than full-image operations)
-            pill_bgr_crop = self.image[y:y+h, x:x+w]
+            pill_bgr_crop = img[y:y+h, x:x+w]
             mask_crop = single_mask[y:y+h, x:x+w]
 
             if pill_bgr_crop.size == 0:
@@ -75,4 +77,4 @@ class ImageSegmenter:
             extracted_pills.append(padded)
             bboxes.append((x, y, w, h))
 
-        return extracted_pills, bboxes
+        return extracted_pills, bboxes , thresh
