@@ -7,3 +7,4 @@ RESIZE = 244
 
 # when scaler is not fitted
 TRAIN_ROOT = "./dataset/train/"
+MODEL_PATH = './models/'
