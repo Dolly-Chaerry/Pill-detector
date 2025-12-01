@@ -1,6 +1,5 @@
 import streamlit as st
 import cv2
-import numpy as np
 from image_segmentation import ImageSegmenter
 from feature_extractor import FeatureExtractor
 import joblib
