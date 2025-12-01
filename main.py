@@ -123,37 +123,37 @@ masks = []
 
 
 # train model
-train = np.load("train_features.npz")
-val   = np.load("val_features.npz")
-test  = np.load("test_features.npz")
+# train = np.load("train_features.npz")
+# val   = np.load("val_features.npz")
+# test  = np.load("test_features.npz")
 
-X_train, y_train = train["features"], train["labels"]
-X_val,   y_val   = val["features"],   val["labels"]
-X_test,  y_test  = test["features"],  test["labels"]
+# X_train, y_train = train["features"], train["labels"]
+# X_val,   y_val   = val["features"],   val["labels"]
+# X_test,  y_test  = test["features"],  test["labels"]
 
-best_score = 0
-best_C = None
+# best_score = 0
+# best_C = None
 
-print("Tuning SVM hyperparameter C...")
-for C in [0.1, 1, 5, 10, 25, 50, 100, 500]:
-    svm = SVC(C=C, kernel='rbf', class_weight='balanced')
-    svm.fit(X_train, y_train)
-    val_acc = accuracy_score(y_val, svm.predict(X_val))
+# print("Tuning SVM hyperparameter C...")
+# for C in [0.1, 1, 5, 10, 25, 50, 100, 500]:
+#     svm = SVC(C=C, kernel='rbf', class_weight='balanced')
+#     svm.fit(X_train, y_train)
+#     val_acc = accuracy_score(y_val, svm.predict(X_val))
     
-    print(f"   C={C:>5} → val accuracy: {val_acc:.4f}")
-    if val_acc > best_score:
-        best_score = val_acc
-        best_C = C
+#     print(f"   C={C:>5} → val accuracy: {val_acc:.4f}")
+#     if val_acc > best_score:
+#         best_score = val_acc
+#         best_C = C
 
-print(f"\nBest C = {best_C} (validation accuracy = {best_score:.4f})")
+# print(f"\nBest C = {best_C} (validation accuracy = {best_score:.4f})")
 
-# FINAL MODEL: retrain on train + validation
-final_svm = SVC(C=best_C, kernel='rbf', class_weight='balanced')
-final_svm.fit(np.vstack([X_train, X_val]), np.hstack([y_train, y_val]))
+# # FINAL MODEL: retrain on train + validation
+# final_svm = SVC(C=best_C, kernel='rbf', class_weight='balanced')
+# final_svm.fit(np.vstack([X_train, X_val]), np.hstack([y_train, y_val]))
 
-test_acc = accuracy_score(y_test, final_svm.predict(X_test))
-print(f"REAL FINAL TEST ACCURACY: {test_acc:.4f} → This is your production performance!\n")
+# test_acc = accuracy_score(y_test, final_svm.predict(X_test))
+# print(f"REAL FINAL TEST ACCURACY: {test_acc:.4f} → This is your production performance!\n")
 
-model_path = "svm_model.joblib"
-joblib.dump(final_svm, model_path)
-print(f"Model saved → {model_path}")
+# model_path = "svm_model.joblib"
+# joblib.dump(final_svm, model_path)
+# print(f"Model saved → {model_path}")
